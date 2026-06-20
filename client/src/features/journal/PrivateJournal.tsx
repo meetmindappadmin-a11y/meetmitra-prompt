@@ -3,7 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import type { AnalysisResult, Mood } from '@shared/types';
 import { useApp } from '../../context/AppContext';
 import { useSafety } from '../safety/SafetyProvider';
-import { Button, Card } from '../../components/ui';
+import { Button, Card, Page } from '../../components/ui';
+import { GlossTile, LockGlyph, SparkleGlyph } from '../../components/icons';
 import { analyzeEntry } from '../../lib/api';
 import { createEntry } from '../../lib/entry';
 import { clientCrisisRisk } from '../../lib/crisis';
@@ -39,8 +40,16 @@ export function PrivateJournal() {
 
   if (result) {
     return (
-      <div className="space-y-4 p-4">
+      <Page max="md">
         <Card className="animate-rise">
+          <div className="mb-3 flex items-center gap-3">
+            <GlossTile size={38} radius={12} gradient="lilac">
+              <SparkleGlyph size={20} />
+            </GlossTile>
+            <span className="text-xs font-semibold tracking-[0.08em] text-muted uppercase">
+              A gentle reflection
+            </span>
+          </div>
           <p className="text-[15px] leading-relaxed text-ink">{result.themeSummary}</p>
 
           {result.triggers.length > 0 && (
@@ -66,7 +75,7 @@ export function PrivateJournal() {
         {result.suggestedExercise !== 'none' && (
           <Button
             variant="calm"
-            className="w-full"
+            className="mt-4 w-full"
             onClick={() => navigate('/calm', { state: { focus: result.suggestedExercise } })}
           >
             {result.suggestedExercise === 'breathing'
@@ -75,7 +84,7 @@ export function PrivateJournal() {
           </Button>
         )}
 
-        <div className="grid grid-cols-2 gap-2">
+        <div className="mt-3 grid grid-cols-2 gap-2">
           <Button
             variant="ghost"
             onClick={() => {
@@ -89,25 +98,28 @@ export function PrivateJournal() {
             Done
           </Button>
         </div>
-      </div>
+      </Page>
     );
   }
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex shrink-0 items-center gap-2 border-b border-line bg-surface/70 px-3 py-2">
+    <div className="mx-auto flex h-full w-full max-w-2xl flex-col">
+      <div className="flex shrink-0 items-center gap-2 border-b border-line px-4 py-2.5 sm:px-6">
         <button
           type="button"
           onClick={() => navigate('/')}
-          className="rounded-lg px-2 py-1 text-sm text-muted hover:text-ink"
+          className="rounded-lg px-2 py-1 text-sm text-muted transition hover:text-ink"
         >
           ‹ Today
         </button>
-        <span className="text-sm font-medium text-ink">Private note</span>
-        <span className="ml-auto text-xs text-muted">🔒 stays on your device</span>
+        <span className="text-sm font-semibold text-ink">Private note</span>
+        <span className="ml-auto inline-flex items-center gap-1.5 text-xs text-muted">
+          <LockGlyph size={14} />
+          stays on your device
+        </span>
       </div>
 
-      <div className="flex flex-1 flex-col p-4">
+      <div className="flex flex-1 flex-col px-4 py-4 sm:px-6">
         <p className="mb-2 text-[15px] text-muted">{PROMPT}</p>
         <textarea
           autoFocus
@@ -115,7 +127,7 @@ export function PrivateJournal() {
           onChange={(e) => setText(e.target.value)}
           placeholder="Write as much or as little as you like. No one else will read this."
           aria-label="Your private note"
-          className="flex-1 resize-none rounded-2xl border border-line bg-surface p-4 text-[15px] leading-relaxed text-ink outline-none"
+          className="flex-1 resize-none rounded-2xl border border-line bg-surface p-4 text-[15px] leading-relaxed text-ink shadow-soft outline-none focus:border-primary/40"
         />
         <Button className="mt-3 w-full" onClick={save} disabled={!text.trim() || saving}>
           {saving ? 'Reading it with care…' : 'Save reflection'}

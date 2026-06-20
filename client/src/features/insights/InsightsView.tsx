@@ -2,7 +2,8 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Mood, TriggerInsight } from '@shared/types';
 import { useApp } from '../../context/AppContext';
-import { Button, Card, SectionTitle } from '../../components/ui';
+import { Button, Card, Page, SectionTitle } from '../../components/ui';
+import { GlossTile, HeartGlyph, SparkleGlyph } from '../../components/icons';
 import { computeWeeklyInsight } from '../../lib/insights';
 import { TRIGGER_EMOJI, TRIGGER_LABEL } from '../../lib/labels';
 
@@ -13,10 +14,12 @@ export function InsightsView() {
 
   if (entries.length === 0) {
     return (
-      <div className="p-4">
+      <Page max="sm">
         <Card className="animate-rise text-center">
-          <div className="mb-2 text-3xl" aria-hidden>
-            🌱
+          <div className="mx-auto mb-3 w-fit">
+            <GlossTile size={52} radius={16} gradient="lilac" glow>
+              <SparkleGlyph size={26} />
+            </GlossTile>
           </div>
           <p className="text-[15px] text-ink">Nothing here yet — and that’s okay.</p>
           <p className="mt-1 text-sm text-muted">
@@ -27,85 +30,103 @@ export function InsightsView() {
             Do a check-in
           </Button>
         </Card>
-      </div>
+      </Page>
     );
   }
 
   return (
-    <div className="space-y-4 p-4 pb-8">
+    <Page max="2xl">
       <Card className="animate-rise bg-grad-calm">
-        <SectionTitle>What I’m noticing</SectionTitle>
-        <p className="font-display text-lg leading-snug text-ink">{weekly.headline}</p>
+        <div className="flex items-start gap-3.5">
+          <GlossTile size={44} radius={14} gradient="lilac" glow>
+            <SparkleGlyph size={22} />
+          </GlossTile>
+          <div>
+            <SectionTitle>What I’m noticing</SectionTitle>
+            <p className="font-display text-xl leading-snug text-ink">{weekly.headline}</p>
+          </div>
+        </div>
       </Card>
 
-      {weekly.moodTrend.length >= 2 && (
-        <Card>
-          <SectionTitle>Mood over time</SectionTitle>
-          <Sparkline values={weekly.moodTrend} />
-          {weekly.avgMood !== null && (
-            <p className="mt-2 text-sm text-muted">
-              Average so far: {weekly.avgMood.toFixed(1)} / 5 across {weekly.entryCount} check-in
-              {weekly.entryCount === 1 ? '' : 's'}.
+      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+        {weekly.moodTrend.length >= 2 && (
+          <Card>
+            <SectionTitle>Mood over time</SectionTitle>
+            <Sparkline values={weekly.moodTrend} />
+            {weekly.avgMood !== null && (
+              <p className="mt-2 text-sm text-muted">
+                Average so far: {weekly.avgMood.toFixed(1)} / 5 across {weekly.entryCount} check-in
+                {weekly.entryCount === 1 ? '' : 's'}.
+              </p>
+            )}
+          </Card>
+        )}
+
+        {weekly.topTriggers.length > 0 && (
+          <Card>
+            <SectionTitle>What tends to weigh on you</SectionTitle>
+            <div className="space-y-3">
+              {weekly.topTriggers.map((t) => (
+                <TriggerBar key={t.tag} insight={t} />
+              ))}
+            </div>
+            <p className="mt-3 text-xs text-muted">
+              Longer bars mark what shows up on your heavier days — not a verdict, just a pattern
+              worth seeing.
             </p>
-          )}
-        </Card>
-      )}
+          </Card>
+        )}
 
-      {weekly.topTriggers.length > 0 && (
-        <Card>
-          <SectionTitle>What tends to weigh on you</SectionTitle>
-          <div className="space-y-3">
-            {weekly.topTriggers.map((t) => (
-              <TriggerBar key={t.tag} insight={t} />
-            ))}
-          </div>
-          <p className="mt-3 text-xs text-muted">
-            Longer bars mark what shows up on your heavier days — not a verdict, just a pattern worth
-            seeing.
-          </p>
-        </Card>
-      )}
+        {weekly.topEmotions.length > 0 && (
+          <Card className="lg:col-span-2">
+            <SectionTitle>Feelings you’ve named</SectionTitle>
+            <div className="flex flex-wrap gap-1.5">
+              {weekly.topEmotions.map((e) => (
+                <span
+                  key={e.label}
+                  className="rounded-full border border-line bg-surface-2 px-3 py-1 text-sm text-ink"
+                >
+                  {e.label}
+                  {e.count > 1 && <span className="ml-1 text-muted">×{e.count}</span>}
+                </span>
+              ))}
+            </div>
+            <p className="mt-3 text-xs text-muted">
+              Naming feelings precisely is a real skill — and it helps you steer them.
+            </p>
+          </Card>
+        )}
+      </div>
 
-      {weekly.topEmotions.length > 0 && (
-        <Card>
-          <SectionTitle>Feelings you’ve named</SectionTitle>
-          <div className="flex flex-wrap gap-1.5">
-            {weekly.topEmotions.map((e) => (
-              <span
-                key={e.label}
-                className="rounded-full border border-line bg-surface-2 px-3 py-1 text-sm text-ink"
-              >
-                {e.label}
-                {e.count > 1 && <span className="ml-1 text-muted">×{e.count}</span>}
-              </span>
-            ))}
-          </div>
-          <p className="mt-3 text-xs text-muted">
-            Naming feelings precisely is a real skill — and it helps you steer them.
-          </p>
-        </Card>
-      )}
-
-      <Card className="bg-primary-soft">
-        <p className="text-[15px] leading-relaxed text-ink">💡 {weekly.copingNudge}</p>
+      <Card className="mt-4 bg-primary-soft">
+        <div className="flex items-start gap-3">
+          <GlossTile size={38} radius={12}>
+            <HeartGlyph size={20} />
+          </GlossTile>
+          <p className="text-[15px] leading-relaxed text-ink">{weekly.copingNudge}</p>
+        </div>
       </Card>
 
-      <div className="pt-2 text-center">
+      <div className="pt-6 text-center">
         <p className="text-xs text-muted">Everything here lives only on this device.</p>
         <button
           type="button"
           onClick={() => {
-            if (window.confirm('Erase all your check-ins and notes from this device? This cannot be undone.')) {
+            if (
+              window.confirm(
+                'Erase all your check-ins and notes from this device? This cannot be undone.',
+              )
+            ) {
               resetAll();
               navigate('/');
             }
           }}
-          className="mt-1 text-xs text-muted underline underline-offset-2"
+          className="mt-1 text-xs text-muted underline underline-offset-2 hover:text-ink"
         >
           Erase my data
         </button>
       </div>
-    </div>
+    </Page>
   );
 }
 
@@ -142,9 +163,22 @@ function Sparkline({ values }: { values: Mood[] }) {
   const x = (i: number) => pad + (i * (w - 2 * pad)) / span;
   const y = (v: Mood) => pad + ((5 - v) / 4) * (h - 2 * pad);
   const points = values.map((v, i) => `${x(i)},${y(v)}`).join(' ');
+  const area = `${pad},${h - pad} ${points} ${w - pad},${h - pad}`;
 
   return (
-    <svg viewBox={`0 0 ${w} ${h}`} className="w-full" role="img" aria-label="Your mood trend over time">
+    <svg
+      viewBox={`0 0 ${w} ${h}`}
+      className="w-full"
+      role="img"
+      aria-label="Your mood trend over time"
+    >
+      <defs>
+        <linearGradient id="moodfill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="var(--primary)" stopOpacity="0.22" />
+          <stop offset="100%" stopColor="var(--primary)" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <polygon points={area} fill="url(#moodfill)" />
       <polyline
         points={points}
         fill="none"

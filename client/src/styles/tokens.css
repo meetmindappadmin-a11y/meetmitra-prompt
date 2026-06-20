@@ -1,10 +1,9 @@
 @import 'tailwindcss';
 
 /*
-  MindMitra design system — calm, warm, editorial.
-  Low-saturation palette with real depth (soft shadows, layered surfaces) and a
-  serif display face for warmth. Red is reserved strictly for the crisis surface.
-  Light + dark via prefers-color-scheme; body text targets contrast >= 4.5:1.
+  MindMitra design system — "Soft Sky".
+  Airy, clear, premium. Morning dawn canvas, white clouds, sky blue +
+  periwinkle accents, ethereal depth and glossy glass effects. 
 */
 
 @theme {
@@ -13,8 +12,10 @@
   --font-serif: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Georgia,
     Cambria, 'Times New Roman', serif;
 
-  --shadow-soft: 0 1px 2px rgba(28, 25, 20, 0.05), 0 12px 30px -16px rgba(28, 25, 20, 0.22);
-  --shadow-lift: 0 2px 8px rgba(28, 25, 20, 0.08), 0 28px 60px -28px rgba(20, 18, 14, 0.45);
+  /* Ethereal shadows that feel like light passing through clouds. */
+  --shadow-soft: 0 1px 3px rgba(100, 116, 139, 0.05), 0 12px 24px -12px rgba(148, 163, 184, 0.2);
+  --shadow-lift: 0 4px 12px rgba(100, 116, 139, 0.08), 0 24px 48px -12px rgba(50, 130, 200, 0.25);
+  --shadow-glow: 0 10px 26px -10px rgba(56, 189, 248, 0.4);
 }
 
 @theme inline {
@@ -29,6 +30,8 @@
   --color-primary-2: var(--primary-2);
   --color-primary-ink: var(--primary-ink);
   --color-primary-soft: var(--primary-soft);
+  --color-lilac: var(--lilac);
+  --color-lilac-soft: var(--lilac-soft);
   --color-calm: var(--calm);
   --color-calm-soft: var(--calm-soft);
   --color-warm: var(--warm);
@@ -38,46 +41,52 @@
 }
 
 :root {
-  --page: #efe9dd;
-  --page-2: #f6f2ea;
-  --bg: #faf7f1;
+  --page: #f0f9ff;
+  --page-2: #e0f2fe;
+  --page-3: #f5f3ff;
+  --bg: #f8fafc;
   --surface: #ffffff;
-  --surface-2: #f3efe7;
-  --ink: #2a2926;
-  --muted: #6a675e;
-  --line: #e8e2d6;
-  --primary: #3f7d6e;
-  --primary-2: #5aa18d;
+  --surface-2: #f1f5f9;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --primary: #0a74c2;
+  --primary-2: #5b54e8;
   --primary-ink: #ffffff;
-  --primary-soft: #e4efe9;
-  --calm: #5685a6;
-  --calm-soft: #e6eef3;
-  --warm: #c98b5e;
-  --warm-soft: #f6eae0;
-  --danger: #a83a2b;
-  --danger-bg: #fbeeeb;
+  --primary-soft: #e4f1fc;
+  --lilac: #818cf8;
+  --lilac-soft: #eef2ff;
+  --calm: #0e7aab;
+  --calm-soft: #e6f4fd;
+  --warm: #f43f5e;
+  --warm-soft: #fff1f2;
+  --danger: #ef4444;
+  --danger-bg: #fee2e2;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --page: #0c0d10;
-    --page-2: #14161b;
-    --bg: #15171c;
-    --surface: #1e222a;
-    --surface-2: #262b34;
-    --ink: #edeae2;
-    --muted: #a8a59c;
-    --line: #313742;
-    --primary: #6fb29f;
-    --primary-2: #87c4b1;
-    --primary-ink: #0c1a16;
-    --primary-soft: #223029;
-    --calm: #84b0cc;
-    --calm-soft: #1d2a33;
-    --warm: #d6a273;
-    --warm-soft: #2c2319;
-    --danger: #e88373;
-    --danger-bg: #2c1d1a;
+    --page: #0d0f1f;
+    --page-2: #141733;
+    --page-3: #1a1633;
+    --bg: #11142a;
+    --surface: #1a1e38;
+    --surface-2: #232843;
+    --ink: #ecebf7;
+    --muted: #a4a8cd;
+    --line: #2d3258;
+    --primary: #8b93ff;
+    --primary-2: #a99cff;
+    --primary-ink: #11132a;
+    --primary-soft: #262b4f;
+    --lilac: #b9a6ff;
+    --lilac-soft: #221f44;
+    --calm: #71b1e8;
+    --calm-soft: #1b2742;
+    --warm: #e08aae;
+    --warm-soft: #2c1b27;
+    --danger: #ef7a6c;
+    --danger-bg: #2e1b1a;
   }
 }
 
@@ -98,7 +107,10 @@ body {
   line-height: 1.55;
   color: var(--ink);
   background-color: var(--page);
-  background-image: radial-gradient(120% 80% at 50% -10%, var(--page-2), var(--page) 60%);
+  /* Soft aurora: a periwinkle and a lilac bloom over the cool canvas. */
+  background-image:
+    radial-gradient(80% 55% at 12% -8%, var(--page-2), transparent 60%),
+    radial-gradient(70% 50% at 100% 0%, var(--page-3), transparent 55%);
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -114,19 +126,58 @@ body {
 .bg-grad-primary {
   background-image: linear-gradient(135deg, var(--color-primary), var(--color-primary-2));
 }
+.bg-grad-lilac {
+  background-image: linear-gradient(135deg, var(--color-primary-2), var(--color-lilac));
+}
 .bg-grad-calm {
   background-image: linear-gradient(
     160deg,
     var(--color-calm-soft),
-    color-mix(in oklab, var(--color-calm) 45%, transparent)
+    color-mix(in oklab, var(--color-calm) 42%, transparent)
   );
+}
+
+/* Gradient text for the wordmark / hero numerals. */
+.text-grad-primary {
+  background-image: linear-gradient(120deg, var(--color-primary), var(--color-lilac));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Frosted glass — used by the top bar and floating surfaces. */
+.glass {
+  background-color: color-mix(in oklab, var(--surface) 72%, transparent);
+  -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  backdrop-filter: saturate(1.4) blur(14px);
+}
+
+/* A thin glossy top-edge highlight for premium cards. */
+.gloss-edge {
+  position: relative;
+}
+.gloss-edge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding-top: 1px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, #ffffff 55%, transparent),
+    transparent 38%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 /* Visible focus for keyboard users. */
 :focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
 /* Respect users who prefer reduced motion — no exceptions. */
@@ -144,7 +195,7 @@ body {
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -153,5 +204,19 @@ body {
 }
 
 .animate-rise {
-  animation: rise 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.animate-floaty {
+  animation: floaty 6s ease-in-out infinite;
 }

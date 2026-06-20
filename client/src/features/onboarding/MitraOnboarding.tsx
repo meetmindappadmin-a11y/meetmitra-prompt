@@ -80,7 +80,9 @@ export function MitraOnboarding() {
         <header className="flex shrink-0 items-center gap-2.5 border-b border-line bg-surface/85 px-4 py-3 backdrop-blur">
           <MitraAvatar size={36} />
           <div>
-            <div className="font-display text-[17px] font-semibold leading-tight text-ink">MindMitra</div>
+            <div className="font-display text-[17px] leading-tight font-semibold">
+              <span className="text-grad-primary">MindMitra</span>
+            </div>
             <div className="text-xs text-muted">Getting to know each other</div>
           </div>
         </header>

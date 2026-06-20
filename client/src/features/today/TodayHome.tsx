@@ -1,8 +1,11 @@
 import { useState } from 'react';
+import type { ComponentType } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Mood } from '@shared/types';
 import { useApp } from '../../context/AppContext';
-import { Button, Card } from '../../components/ui';
+import { Button, Card, Page } from '../../components/ui';
+import { GlossTile, BreatheGlyph, TalkGlyph, WriteGlyph } from '../../components/icons';
+import { MitraAvatar } from '../../components/MitraAvatar';
 import { createEntry } from '../../lib/entry';
 import { examContext } from '../../lib/exam';
 import { MoodTap } from './MoodTap';
@@ -35,120 +38,147 @@ export function TodayHome() {
   }
 
   return (
-    <div className="space-y-5 p-4 pb-8">
+    <Page max="2xl">
       <div className="animate-rise">
-        <h1 className="font-display text-[26px] font-semibold leading-tight text-ink">
+        <h1 className="font-display text-[28px] leading-tight font-semibold text-ink sm:text-[34px]">
           {greeting()}, {profile?.name ?? 'friend'}.
         </h1>
-        <p className="mt-1.5 text-[15px] text-muted">{toneLine}</p>
+        <p className="mt-1.5 text-[15px] text-muted sm:text-base">{toneLine}</p>
       </div>
 
-      {!logged ? (
-        <Card className="animate-rise">
-          <p className="mb-3 text-[15px] font-medium text-ink">How’s today sitting with you?</p>
-          <MoodTap value={mood} onChange={setMood} />
+      <div className="mt-6 grid gap-4 lg:grid-cols-5">
+        <div className="lg:col-span-3">
+          {!logged ? (
+            <Card className="animate-rise">
+              <p className="mb-3 text-[15px] font-medium text-ink">How’s today sitting with you?</p>
+              <MoodTap value={mood} onChange={setMood} />
 
-          {mood && (
-            <div className="mt-5 animate-rise">
-              <p className="mb-2 text-sm text-muted">
-                Want to talk it out, write it down, or just breathe? No pressure to do any of them.
-              </p>
-              <div className="grid grid-cols-3 gap-2">
-                <DoorButton
-                  emoji="💬"
-                  label="Talk"
-                  onClick={() => navigate('/talk', { state: { mood } })}
-                />
-                <DoorButton
-                  emoji="✍️"
-                  label="Write"
-                  onClick={() => navigate('/write', { state: { mood } })}
-                />
-                <DoorButton
-                  emoji="🌬️"
-                  label="Breathe"
+              {mood && (
+                <div className="mt-6 animate-rise">
+                  <p className="mb-2.5 text-sm text-muted">
+                    Want to talk it out, write it down, or just breathe? No pressure to do any of them.
+                  </p>
+                  <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
+                    <DoorButton
+                      Icon={TalkGlyph}
+                      label="Talk"
+                      hint="Say it out loud"
+                      onClick={() => navigate('/talk', { state: { mood } })}
+                    />
+                    <DoorButton
+                      Icon={WriteGlyph}
+                      label="Write"
+                      hint="Just for you"
+                      onClick={() => navigate('/write', { state: { mood } })}
+                    />
+                    <DoorButton
+                      Icon={BreatheGlyph}
+                      label="Breathe"
+                      hint="Settle your body"
+                      onClick={() => navigate('/calm', { state: { focus: 'breathing' } })}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={justLog}
+                    className="mt-3 w-full rounded-xl py-2 text-sm text-muted underline-offset-2 hover:text-ink hover:underline"
+                  >
+                    Just log this moment
+                  </button>
+                </div>
+              )}
+            </Card>
+          ) : (
+            <Card className="animate-rise">
+              <p className="text-[15px] text-ink">Logged. Thank you for checking in. 🌿</p>
+              {mood && mood <= 2 && (
+                <Button
+                  variant="calm"
+                  className="mt-3 w-full"
                   onClick={() => navigate('/calm', { state: { focus: 'breathing' } })}
-                />
-              </div>
+                >
+                  Take a minute to breathe?
+                </Button>
+              )}
               <button
                 type="button"
-                onClick={justLog}
-                className="mt-3 w-full text-sm text-muted underline-offset-2 hover:underline"
+                onClick={() => {
+                  setLogged(false);
+                  setMood(null);
+                }}
+                className="mt-3 w-full rounded-xl py-2 text-sm text-muted underline-offset-2 hover:text-ink hover:underline"
               >
-                Just log this moment
+                Check in again
               </button>
-            </div>
+            </Card>
           )}
-        </Card>
-      ) : (
-        <Card className="animate-rise">
-          <p className="text-[15px] text-ink">Logged. Thank you for checking in. 🌿</p>
-          {mood && mood <= 2 && (
-            <Button
-              variant="calm"
-              className="mt-3 w-full"
-              onClick={() => navigate('/calm', { state: { focus: 'breathing' } })}
-            >
-              Take a minute to breathe?
-            </Button>
-          )}
-          <button
-            type="button"
-            onClick={() => {
-              setLogged(false);
-              setMood(null);
-            }}
-            className="mt-3 w-full text-sm text-muted underline-offset-2 hover:underline"
-          >
-            Check in again
-          </button>
-        </Card>
-      )}
+        </div>
 
-      {entries.length > 0 && (
-        <button
-          type="button"
-          onClick={() => navigate('/insights')}
-          className="w-full text-left"
-        >
-          <Card className="transition hover:border-primary/40">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-[15px] font-medium text-ink">Your patterns so far</div>
-                <div className="text-sm text-muted">
-                  {entries.length} check-in{entries.length === 1 ? '' : 's'} · see what they reveal
+        <aside className="space-y-4 lg:col-span-2">
+          {entries.length > 0 && (
+            <button
+              type="button"
+              onClick={() => navigate('/insights')}
+              className="block w-full text-left"
+            >
+              <Card className="transition hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-lift">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <div className="text-[15px] font-semibold text-ink">Your patterns so far</div>
+                    <div className="mt-0.5 text-sm text-muted">
+                      {entries.length} check-in{entries.length === 1 ? '' : 's'} · see what they reveal
+                    </div>
+                  </div>
+                  <span aria-hidden className="text-xl text-primary">→</span>
                 </div>
+              </Card>
+            </button>
+          )}
+
+          <Card className="bg-grad-calm">
+            <div className="flex items-start gap-3">
+              <MitraAvatar size={40} />
+              <div>
+                <div className="text-[15px] font-semibold text-ink">Mitra’s here</div>
+                <p className="mt-1 text-sm text-ink/80">
+                  Whenever it gets heavy — even at 3am — I’m one tap away. No judgement, ever.
+                </p>
+                <Button className="mt-3" onClick={() => navigate('/talk')}>
+                  Talk to Mitra
+                </Button>
               </div>
-              <span aria-hidden className="text-primary">
-                →
-              </span>
             </div>
           </Card>
-        </button>
-      )}
-    </div>
+        </aside>
+      </div>
+    </Page>
   );
 }
 
 function DoorButton({
-  emoji,
+  Icon,
   label,
+  hint,
   onClick,
 }: {
-  emoji: string;
+  Icon: ComponentType<{ size?: number }>;
   label: string;
+  hint: string;
   onClick: () => void;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="flex min-h-[72px] flex-col items-center justify-center gap-1 rounded-2xl border border-line bg-surface-2 text-sm text-ink transition hover:-translate-y-0.5 hover:border-primary/50 hover:bg-surface hover:shadow-soft"
+      className="group flex items-center gap-3 rounded-2xl border border-line bg-surface-2 p-3.5 text-left transition hover:-translate-y-0.5 hover:border-primary/40 hover:bg-surface hover:shadow-soft sm:flex-col sm:items-start sm:gap-3 sm:p-4"
     >
-      <span aria-hidden className="text-2xl">
-        {emoji}
+      <GlossTile size={42} radius={13}>
+        <Icon size={22} />
+      </GlossTile>
+      <span>
+        <span className="block text-[15px] font-semibold text-ink">{label}</span>
+        <span className="block text-xs text-muted">{hint}</span>
       </span>
-      {label}
     </button>
   );
 }

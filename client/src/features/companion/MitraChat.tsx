@@ -104,8 +104,8 @@ export function MitraChat() {
   }
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex shrink-0 items-center gap-2 border-b border-line bg-surface/85 px-3 py-2.5 backdrop-blur">
+    <div className="mx-auto flex h-full w-full max-w-4xl flex-col">
+      <div className="glass flex shrink-0 items-center gap-2 border-b border-line px-3 py-2.5 sm:px-5">
         <button
           type="button"
           onClick={() => navigate('/')}
@@ -121,7 +121,7 @@ export function MitraChat() {
         </div>
       </div>
 
-      <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto p-4">
+      <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4 sm:px-6">
         {messages.map((m, i) => (
           <ChatBubble key={i} role={m.role} content={m.content} />
         ))}
@@ -130,7 +130,7 @@ export function MitraChat() {
       </div>
 
       <form
-        className="flex shrink-0 items-end gap-2 border-t border-line bg-surface p-3"
+        className="flex shrink-0 items-end gap-2 border-t border-line px-4 py-3 sm:px-6"
         onSubmit={(e) => {
           e.preventDefault();
           send();

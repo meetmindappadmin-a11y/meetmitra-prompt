@@ -1,20 +1,52 @@
-import { Outlet } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
+import type { ComponentType } from 'react';
 import { useApp } from '../context/AppContext';
 import { useSafety } from '../features/safety/SafetyProvider';
 import { examContext } from '../lib/exam';
-import { BottomNav } from './BottomNav';
+import { GlossTile, HeartGlyph, InsightsGlyph, LeafGlyph, SunGlyph } from './icons';
 
-function BrandMark() {
+interface NavEntry {
+  to: string;
+  label: string;
+  end: boolean;
+  Icon: ComponentType<{ size?: number }>;
+}
+
+const NAV: NavEntry[] = [
+  { to: '/', label: 'Today', end: true, Icon: SunGlyph },
+  { to: '/insights', label: 'Insights', end: false, Icon: InsightsGlyph },
+  { to: '/calm', label: 'Calm', end: false, Icon: LeafGlyph },
+];
+
+function NavItem({ to, end, label, Icon }: NavEntry) {
   return (
-    <span
-      aria-hidden
-      className="grid h-9 w-9 shrink-0 place-items-center rounded-2xl bg-grad-primary text-primary-ink shadow-soft"
+    <NavLink
+      to={to}
+      end={end}
+      className={({ isActive }) =>
+        `flex items-center gap-2 rounded-full py-1 pr-1 pl-1 text-sm font-medium transition sm:pr-3.5 ${
+          isActive ? 'bg-primary-soft text-primary' : 'text-muted hover:bg-surface-2 hover:text-ink'
+        }`
+      }
     >
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M11 20A7 7 0 0 1 18 4c2 0 3 .5 3 .5s.5 9-6 13c-2.4 1.5-4 1.5-4 1.5z" />
-        <path d="M8 21c0-4 2-7 5-9" />
-      </svg>
-    </span>
+      {({ isActive }) =>
+        isActive ? (
+          <>
+            <GlossTile size={28} radius={9}>
+              <Icon size={16} />
+            </GlossTile>
+            <span className="hidden sm:inline">{label}</span>
+          </>
+        ) : (
+          <>
+            <span className="grid h-7 w-7 place-items-center">
+              <Icon size={20} />
+            </span>
+            <span className="hidden sm:inline">{label}</span>
+          </>
+        )
+      }
+    </NavLink>
   );
 }
 
@@ -24,40 +56,52 @@ function Header() {
   const exam = examContext(profile?.exam ?? null, profile?.examDate ?? null);
 
   return (
-    <header className="flex shrink-0 items-center justify-between gap-2 border-b border-line bg-surface/85 px-4 py-3 backdrop-blur">
-      <div className="flex min-w-0 items-center gap-2.5">
-        <BrandMark />
-        <div className="min-w-0">
-          <div className="font-display text-[17px] font-semibold leading-tight text-ink">MindMitra</div>
-          {exam.countdown && <div className="truncate text-xs text-muted">{exam.countdown}</div>}
+    <header className="glass shrink-0 border-b border-line">
+      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-2 px-4 sm:gap-4 sm:px-6">
+        <div className="flex min-w-0 items-center gap-2.5">
+          <GlossTile size={38} radius={12} glow>
+            <LeafGlyph size={21} />
+          </GlossTile>
+          <div className="min-w-0">
+            <div className="font-display text-[18px] leading-tight font-semibold">
+              <span className="text-grad-primary">MindMitra</span>
+            </div>
+            {exam.countdown && <div className="truncate text-xs text-muted">{exam.countdown}</div>}
+          </div>
         </div>
+
+        <nav
+          aria-label="Primary"
+          className="flex items-center gap-1 rounded-full border border-line bg-surface/55 p-1 shadow-soft"
+        >
+          {NAV.map((item) => (
+            <NavItem key={item.to} {...item} />
+          ))}
+        </nav>
+
+        <button
+          type="button"
+          onClick={openHelp}
+          aria-label="Get urgent help and crisis resources"
+          className="inline-flex min-h-[40px] shrink-0 items-center gap-1.5 rounded-full border border-danger/25 bg-danger-bg px-3 text-sm font-semibold text-danger transition hover:brightness-[0.97] sm:px-3.5"
+        >
+          <HeartGlyph size={16} />
+          <span className="hidden sm:inline">Help</span>
+        </button>
       </div>
-      <button
-        type="button"
-        onClick={openHelp}
-        aria-label="Get urgent help and crisis resources"
-        className="inline-flex min-h-[40px] items-center gap-1.5 rounded-full border border-danger/25 bg-danger-bg px-3.5 text-sm font-medium text-danger transition hover:brightness-[0.97]"
-      >
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-          <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z" />
-          <path d="M12 8v5M12 16.5v.01" />
-        </svg>
-        Help
-      </button>
     </header>
   );
 }
 
 export function Layout() {
   return (
-    <div className="flex h-[100dvh] justify-center sm:items-center">
-      <div className="flex h-full w-full max-w-[440px] flex-col overflow-hidden bg-bg sm:h-[min(100dvh-2rem,900px)] sm:rounded-[32px] sm:shadow-lift sm:ring-1 sm:ring-line">
-        <Header />
-        <main className="flex-1 overflow-y-auto overscroll-contain">
+    <div className="flex h-[100dvh] flex-col overflow-hidden">
+      <Header />
+      <main className="min-h-0 flex-1">
+        <div className="mx-auto h-full w-full max-w-7xl">
           <Outlet />
-        </main>
-        <BottomNav />
-      </div>
+        </div>
+      </main>
     </div>
   );
 }

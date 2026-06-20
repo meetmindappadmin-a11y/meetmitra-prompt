@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Button, Card } from '../../components/ui';
+import { Button, Card, Page } from '../../components/ui';
 
 type Focus = 'breathing' | 'grounding';
 
@@ -10,8 +10,12 @@ export function CalmView() {
   const [tab, setTab] = useState<Focus>(initial === 'grounding' ? 'grounding' : 'breathing');
 
   return (
-    <div className="space-y-4 p-4 pb-8">
-      <div role="tablist" aria-label="Calming exercises" className="flex gap-1 rounded-2xl border border-line bg-surface-2 p-1">
+    <Page max="md">
+      <div
+        role="tablist"
+        aria-label="Calming exercises"
+        className="flex gap-1 rounded-2xl border border-line bg-surface-2 p-1 shadow-soft"
+      >
         <TabButton active={tab === 'breathing'} onClick={() => setTab('breathing')}>
           🌬️ Breathe
         </TabButton>
@@ -19,8 +23,8 @@ export function CalmView() {
           🌿 Ground
         </TabButton>
       </div>
-      {tab === 'breathing' ? <Breathing /> : <Grounding />}
-    </div>
+      <div className="mt-4">{tab === 'breathing' ? <Breathing /> : <Grounding />}</div>
+    </Page>
   );
 }
 
