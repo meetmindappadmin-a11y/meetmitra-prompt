@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import type { Mood, TriggerInsight } from '@shared/types';
 import { useApp } from '../../context/AppContext';
 import { Button, Card, Page, SectionTitle } from '../../components/ui';
-import { GlossTile, HeartGlyph, SparkleGlyph } from '../../components/icons';
+import { GlossTile, HeartGlyph, SparkleGlyph, TriggerIcon } from '../../components/icons';
 import { computeWeeklyInsight } from '../../lib/insights';
-import { TRIGGER_EMOJI, TRIGGER_LABEL } from '../../lib/labels';
+import { TRIGGER_LABEL } from '../../lib/labels';
 
 export function InsightsView() {
   const { entries, resetAll } = useApp();
@@ -138,8 +138,8 @@ function TriggerBar({ insight }: { insight: TriggerInsight }) {
   return (
     <div>
       <div className="mb-1 flex items-center justify-between text-sm text-ink">
-        <span>
-          {TRIGGER_EMOJI[insight.tag]} {TRIGGER_LABEL[insight.tag]}
+        <span className="inline-flex items-center gap-1.5">
+          <TriggerIcon tag={insight.tag} size={15} /> {TRIGGER_LABEL[insight.tag]}
         </span>
         <span className="text-xs text-muted">
           {insight.count}× · avg {insight.avgMood.toFixed(1)}

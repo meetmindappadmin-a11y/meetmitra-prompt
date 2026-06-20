@@ -21,6 +21,15 @@ export interface AnalyzeResponse {
   source: 'claude' | 'mock';
 }
 
+export async function createVoiceSession(): Promise<{ signedUrl: string }> {
+  const res = await fetch('/api/voice/session', { cache: 'no-store' });
+  const data = (await res.json().catch(() => ({}))) as { signedUrl?: string; error?: string };
+  if (!res.ok || !data.signedUrl) {
+    throw new Error(data.error ?? 'Could not start voice right now.');
+  }
+  return { signedUrl: data.signedUrl };
+}
+
 /** Sends an entry for structured analysis. Returns null on failure (UI degrades gracefully). */
 export async function analyzeEntry(req: AnalyzeRequest): Promise<AnalyzeResponse | null> {
   try {

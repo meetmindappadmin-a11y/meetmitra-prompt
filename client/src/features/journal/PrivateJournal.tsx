@@ -4,11 +4,11 @@ import type { AnalysisResult, Mood } from '@shared/types';
 import { useApp } from '../../context/AppContext';
 import { useSafety } from '../safety/SafetyProvider';
 import { Button, Card, Page } from '../../components/ui';
-import { GlossTile, LockGlyph, SparkleGlyph } from '../../components/icons';
+import { GlossTile, LockGlyph, SparkleGlyph, TriggerIcon } from '../../components/icons';
 import { analyzeEntry } from '../../lib/api';
 import { createEntry } from '../../lib/entry';
 import { clientCrisisRisk } from '../../lib/crisis';
-import { DISTORTION_REFRAME, TRIGGER_EMOJI, TRIGGER_LABEL } from '../../lib/labels';
+import { DISTORTION_REFRAME, TRIGGER_LABEL } from '../../lib/labels';
 
 const PROMPT = 'What’s taking up the most space in your head right now?';
 
@@ -57,9 +57,9 @@ export function PrivateJournal() {
               {result.triggers.map((t) => (
                 <span
                   key={t}
-                  className="rounded-full border border-line bg-surface-2 px-2.5 py-1 text-xs text-muted"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface-2 px-2.5 py-1 text-xs text-muted"
                 >
-                  {TRIGGER_EMOJI[t]} {TRIGGER_LABEL[t]}
+                  <TriggerIcon tag={t} size={13} /> {TRIGGER_LABEL[t]}
                 </span>
               ))}
             </div>

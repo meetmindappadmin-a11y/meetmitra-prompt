@@ -51,6 +51,21 @@ cp .env.example .env   # then set ANTHROPIC_API_KEY=...
 
 The key stays **server-side only** (the Express proxy calls Claude). It is never shipped to the browser.
 
+### Optional ElevenLabs voice agent
+
+Create an ElevenAgent in the ElevenLabs dashboard, then add these private variables locally or
+in Railway. The server exchanges them for a short-lived signed conversation URL, so the API key
+never reaches the browser:
+
+```bash
+ELEVENLABS_API_KEY=...
+ELEVENLABS_AGENT_ID=...
+```
+
+Voice is optional: text chat continues to work when these variables are absent. Starting a voice
+session asks for microphone permission and sends that session's audio to ElevenLabs for processing.
+
+
 Other scripts:
 
 ```bash

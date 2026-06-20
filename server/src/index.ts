@@ -6,6 +6,7 @@ import express from 'express';
 import cors from 'cors';
 import { analyzeRouter } from './routes/analyze.js';
 import { chatRouter } from './routes/chat.js';
+import { voiceRouter } from './routes/voice.js';
 import { isLive } from './ai/claude.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -22,6 +23,7 @@ app.get('/api/health', (_req, res) => {
 
 app.use('/api/analyze', analyzeRouter);
 app.use('/api/chat', chatRouter);
+app.use('/api/voice', voiceRouter);
 
 // Optionally serve the built client (so `npm run build && npm start` is a
 // single-port demo). Skipped in dev, where Vite serves the client and proxies /api.

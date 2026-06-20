@@ -1,5 +1,6 @@
 import type { Mood } from '@shared/types';
-import { MOODS, moodEmoji, moodLabel } from '../../lib/mood';
+import { MOODS, moodLabel } from '../../lib/mood';
+import { MoodIcon } from '../../components/icons';
 
 // The 10-second core action: a single, gentle tap. Never a required form.
 export function MoodTap({
@@ -27,8 +28,8 @@ export function MoodTap({
                 : 'border-line bg-surface hover:border-primary/40'
             }`}
           >
-            <span className="text-[27px] leading-none" aria-hidden>
-              {moodEmoji(m)}
+            <span aria-hidden className={active ? '' : 'opacity-80'}>
+              <MoodIcon mood={m} size={28} />
             </span>
             <span className={`text-[11px] ${active ? 'font-medium text-ink' : 'text-muted'}`}>
               {moodLabel(m)}

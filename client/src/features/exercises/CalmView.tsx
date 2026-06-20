@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
+import { Citrus, Ear, Eye, Flower2, Hand, Sprout, Wind } from 'lucide-react';
 import { Button, Card, Page } from '../../components/ui';
 
 type Focus = 'breathing' | 'grounding';
@@ -17,10 +18,14 @@ export function CalmView() {
         className="flex gap-1 rounded-2xl border border-line bg-surface-2 p-1 shadow-soft"
       >
         <TabButton active={tab === 'breathing'} onClick={() => setTab('breathing')}>
-          🌬️ Breathe
+          <span className="inline-flex items-center justify-center gap-1.5">
+            <Wind size={16} /> Breathe
+          </span>
         </TabButton>
         <TabButton active={tab === 'grounding'} onClick={() => setTab('grounding')}>
-          🌿 Ground
+          <span className="inline-flex items-center justify-center gap-1.5">
+            <Sprout size={16} /> Ground
+          </span>
         </TabButton>
       </div>
       <div className="mt-4">{tab === 'breathing' ? <Breathing /> : <Grounding />}</div>
@@ -124,11 +129,11 @@ function Breathing() {
 // ---- Grounding (5-4-3-2-1) ----
 
 const STEPS = [
-  { n: 5, sense: 'things you can see', emoji: '👀' },
-  { n: 4, sense: 'things you can feel or touch', emoji: '✋' },
-  { n: 3, sense: 'things you can hear', emoji: '👂' },
-  { n: 2, sense: 'things you can smell', emoji: '👃' },
-  { n: 1, sense: 'thing you can taste', emoji: '👅' },
+  { n: 5, sense: 'things you can see', Icon: Eye },
+  { n: 4, sense: 'things you can feel or touch', Icon: Hand },
+  { n: 3, sense: 'things you can hear', Icon: Ear },
+  { n: 2, sense: 'things you can smell', Icon: Flower2 },
+  { n: 1, sense: 'thing you can taste', Icon: Citrus },
 ];
 
 function Grounding() {
@@ -138,8 +143,11 @@ function Grounding() {
   if (done) {
     return (
       <Card className="text-center">
-        <div className="mb-2 text-3xl" aria-hidden>
-          🌼
+        <div
+          className="mx-auto mb-3 grid h-14 w-14 place-items-center rounded-full bg-calm-soft text-calm"
+          aria-hidden
+        >
+          <Flower2 size={26} />
         </div>
         <p className="text-[15px] text-ink">You’re here, in this moment. Notice your feet on the floor.</p>
         <Button variant="ghost" className="mt-4 w-full" onClick={() => setStep(0)}>
@@ -150,14 +158,18 @@ function Grounding() {
   }
 
   const s = STEPS[step]!;
+  const SenseIcon = s.Icon;
   return (
     <Card className="text-center">
       <p className="text-sm text-muted">5-4-3-2-1 grounding — come back to right now.</p>
       <div className="my-6">
-        <div className="text-5xl" aria-hidden>
-          {s.emoji}
+        <div
+          className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-calm-soft text-calm"
+          aria-hidden
+        >
+          <SenseIcon size={38} />
         </div>
-        <p className="mt-3 text-lg text-ink">
+        <p className="mt-4 text-lg text-ink">
           Name <span className="font-semibold">{s.n}</span> {s.sense}.
         </p>
       </div>

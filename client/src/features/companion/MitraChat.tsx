@@ -10,6 +10,8 @@ import { buildRecentContext } from '../../lib/insights';
 import { examContext } from '../../lib/exam';
 import { clientCrisisRisk } from '../../lib/crisis';
 import { MitraAvatar } from '../../components/MitraAvatar';
+import { Mic } from 'lucide-react';
+import { MitraVoiceAgent } from './MitraVoiceAgent';
 
 function openingLine(name: string, countdown: string | null, hasHistory: boolean): string {
   if (!hasHistory) {
@@ -36,6 +38,7 @@ export function MitraChat() {
   const [input, setInput] = useState('');
   const [streaming, setStreaming] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
+  const [voiceOpen, setVoiceOpen] = useState(false);
   const createdEntry = useRef(false);
 
   const recentContext = useMemo(() => buildRecentContext(entries), [entries]);
@@ -119,7 +122,17 @@ export function MitraChat() {
           <div className="font-display text-[15px] font-semibold text-ink">Mitra</div>
           <div className="text-[11px] text-muted">Here with you</div>
         </div>
+        <button
+          type="button"
+          onClick={() => setVoiceOpen((open) => !open)}
+          className="ml-auto inline-flex min-h-9 items-center gap-1.5 rounded-full border border-primary/25 bg-primary-soft px-3 text-xs font-semibold text-primary transition hover:brightness-[0.98]"
+          aria-expanded={voiceOpen}
+        >
+          <Mic size={15} /> {voiceOpen ? 'Hide voice' : 'Talk by voice'}
+        </button>
       </div>
+
+      {voiceOpen && <MitraVoiceAgent onClose={() => setVoiceOpen(false)} />}
 
       <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4 sm:px-6">
         {messages.map((m, i) => (
