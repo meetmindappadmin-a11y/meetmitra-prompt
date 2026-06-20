@@ -4,6 +4,9 @@
   "private": true,
   "type": "module",
   "description": "MindMitra — a GenAI study-wellness companion that uncovers hidden stress triggers for exam aspirants.",
+  "engines": {
+    "node": ">=20.19"
+  },
   "workspaces": [
     "client",
     "server"
