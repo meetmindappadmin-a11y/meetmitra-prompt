@@ -53,13 +53,15 @@ The key stays **server-side only** (the Express proxy calls Claude). It is never
 
 ### Optional ElevenLabs voice agent
 
-Create an ElevenAgent in the ElevenLabs dashboard, then add these private variables locally or
-in Railway. The server exchanges them for a short-lived signed conversation URL, so the API key
-never reaches the browser:
+Create an ElevenAgent in the ElevenLabs dashboard, then add the API key locally or
+in Railway. The server exchanges it for a short-lived signed conversation URL, so the API key
+never reaches the browser. `ELEVENLABS_AGENT_ID` is optional; if omitted, the server auto-picks
+the first Conversational AI agent in the account.
 
 ```bash
 ELEVENLABS_API_KEY=...
-ELEVENLABS_AGENT_ID=...
+# Optional, recommended when the account has multiple agents:
+ELEVENLABS_AGENT_ID=agent_...
 ```
 
 Voice is optional: text chat continues to work when these variables are absent. Starting a voice
