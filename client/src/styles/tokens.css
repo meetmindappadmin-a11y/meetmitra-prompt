@@ -1,0 +1,157 @@
+@import 'tailwindcss';
+
+/*
+  MindMitra design system — calm, warm, editorial.
+  Low-saturation palette with real depth (soft shadows, layered surfaces) and a
+  serif display face for warmth. Red is reserved strictly for the crisis surface.
+  Light + dark via prefers-color-scheme; body text targets contrast >= 4.5:1.
+*/
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --font-serif: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Georgia,
+    Cambria, 'Times New Roman', serif;
+
+  --shadow-soft: 0 1px 2px rgba(28, 25, 20, 0.05), 0 12px 30px -16px rgba(28, 25, 20, 0.22);
+  --shadow-lift: 0 2px 8px rgba(28, 25, 20, 0.08), 0 28px 60px -28px rgba(20, 18, 14, 0.45);
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-primary: var(--primary);
+  --color-primary-2: var(--primary-2);
+  --color-primary-ink: var(--primary-ink);
+  --color-primary-soft: var(--primary-soft);
+  --color-calm: var(--calm);
+  --color-calm-soft: var(--calm-soft);
+  --color-warm: var(--warm);
+  --color-warm-soft: var(--warm-soft);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+}
+
+:root {
+  --page: #efe9dd;
+  --page-2: #f6f2ea;
+  --bg: #faf7f1;
+  --surface: #ffffff;
+  --surface-2: #f3efe7;
+  --ink: #2a2926;
+  --muted: #6a675e;
+  --line: #e8e2d6;
+  --primary: #3f7d6e;
+  --primary-2: #5aa18d;
+  --primary-ink: #ffffff;
+  --primary-soft: #e4efe9;
+  --calm: #5685a6;
+  --calm-soft: #e6eef3;
+  --warm: #c98b5e;
+  --warm-soft: #f6eae0;
+  --danger: #a83a2b;
+  --danger-bg: #fbeeeb;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #0c0d10;
+    --page-2: #14161b;
+    --bg: #15171c;
+    --surface: #1e222a;
+    --surface-2: #262b34;
+    --ink: #edeae2;
+    --muted: #a8a59c;
+    --line: #313742;
+    --primary: #6fb29f;
+    --primary-2: #87c4b1;
+    --primary-ink: #0c1a16;
+    --primary-soft: #223029;
+    --calm: #84b0cc;
+    --calm-soft: #1d2a33;
+    --warm: #d6a273;
+    --warm-soft: #2c2319;
+    --danger: #e88373;
+    --danger-bg: #2c1d1a;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink);
+  background-color: var(--page);
+  background-image: radial-gradient(120% 80% at 50% -10%, var(--page-2), var(--page) 60%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Serif display for headings — warm, editorial, distinctive. */
+.font-display {
+  font-family: var(--font-serif);
+  letter-spacing: -0.01em;
+}
+
+/* Brand gradients for primary/calm affordances. */
+.bg-grad-primary {
+  background-image: linear-gradient(135deg, var(--color-primary), var(--color-primary-2));
+}
+.bg-grad-calm {
+  background-image: linear-gradient(
+    160deg,
+    var(--color-calm-soft),
+    color-mix(in oklab, var(--color-calm) 45%, transparent)
+  );
+}
+
+/* Visible focus for keyboard users. */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* Respect users who prefer reduced motion — no exceptions. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-rise {
+  animation: rise 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}

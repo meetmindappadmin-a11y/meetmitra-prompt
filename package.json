@@ -1,0 +1,23 @@
+{
+  "name": "mindmitra",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "MindMitra — a GenAI study-wellness companion that uncovers hidden stress triggers for exam aspirants.",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently -n server,client -c blue,green \"npm:dev:server\" \"npm:dev:client\"",
+    "dev:server": "npm --workspace server run dev",
+    "dev:client": "npm --workspace client run dev",
+    "build": "npm --workspace client run build",
+    "start": "npm --workspace server run start",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.3",
+    "vitest": "^4.1.9"
+  }
+}

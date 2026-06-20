@@ -1,0 +1,23 @@
+{
+  "name": "mindmitra-server",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.105.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.6",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
+  }
+}
